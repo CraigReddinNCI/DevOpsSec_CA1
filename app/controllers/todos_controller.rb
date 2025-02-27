@@ -42,9 +42,9 @@ class TodosController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_todo
       @todo = Todo.find(params[:id])
-    end    
+    end
 
     def todo_params
       params.require(:todo).permit(:todoname, :tododescription)
-    end    
+    end
 end

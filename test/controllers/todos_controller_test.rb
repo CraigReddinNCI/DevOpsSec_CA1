@@ -39,14 +39,14 @@ class TodosControllerTest < ActionDispatch::IntegrationTest
       post todos_url, params: { todo: { tododescription: "Sample description" } }, as: :json
     end
     assert_response :unprocessable_entity
-  end  
+  end
 
   test "should not create todo, no description" do
     assert_no_difference("Todo.count") do
       post todos_url, params: { todo: { todoname: "Sample Todo" } }, as: :json
     end
     assert_response :unprocessable_entity
-  end  
+  end
 
   test "should not update todo, no name" do
     patch todo_url(@todo), params: { todo: { todoname: "" } }, as: :json
