@@ -48,4 +48,8 @@ class TodosController < ApplicationController
     def todo_params
       params.expect(todo: [ :todoname, :tododescription ])
     end
+
+    def book_params
+      params.require(:todo).permit(:todoname, :tododescription)
+    end
 end
