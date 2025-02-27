@@ -35,4 +35,29 @@ class TodosControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :no_content
   end
+
+  test "should not create todo, no name" do
+    assert_difference("Todo.count") do
+      post todos_url, params: { todo: { tododescription: @todo.tododescription } }, as: :json
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test "should not create todo, no description" do
+    assert_difference("Todo.count") do
+      post todos_url, params: { todo: { todoname: @todo.todoname } }, as: :json
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test "should not update todo, no name" do
+    patch todo_url(@todo), params: { todo: { tododescription: @todo.tododescription } }, as: :json
+    assert_response :unprocessable_entity
+  end
+
+  test "should not update todo, no description" do
+    patch todo_url(@todo), params: { todo: { todoname: @todo.todoname } }, as: :json
+    assert_response :unprocessable_entity
+  end
+
 end
