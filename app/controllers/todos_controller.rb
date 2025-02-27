@@ -44,7 +44,7 @@ class TodosController < ApplicationController
       @todo = Todo.find(params[:id])
     end    
 
-    def book_params
+    def todo_params
       params.require(:todo).permit(:todoname, :tododescription)
-    end
+    end    
 end
