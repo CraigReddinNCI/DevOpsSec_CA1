@@ -1,0 +1,66 @@
+name: "Backend Update"
+
+on:
+  push:
+    branches: 
+    - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Environment Variables
+        env:
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKENDKEY }}
+      - run:
+          name: Save the ssh key 
+          command: echo "$AWS_SECRET_ACCESS_KEY" > {key_will_go_here}.pem 
+      - run:
+          name: Set permissions to use the key
+          command: chmod 600 backendKey.pem
+
+      - name: Deploy to EC2
+        steps:
+          - run:
+            name: Define EC2 instance details
+            command: INSTANCE_ID="i-01a1687bcecec6d30" 
+          - run:
+            name: Define allocated elastic IP
+            command: PUBLIC_IP=98.84.73.133
+          - run:
+            name: SSH into the EC2 instance
+            command: ssh -o StrictHostKeyChecking=no -i {key_will_go_here}.pem ubuntu@$PUBLIC_IP << 'EOF'
+          - run:
+            name: Exit if error occurs
+            command: set -e
+          - run:
+            name: Navigate to App directory
+            command: cd /home/ubuntu/DEVOPSSEC_CA1
+          - run:
+            name: Pull repository lastest changes on to vm
+            command: git pull origin master
+          - run:
+            name: Kill the server if one is running
+            command: pkill -f "rails server" || true
+          - run:
+            name: Update gem files
+            command: sudo apt-get update
+          - run:
+            name: Install dependencies
+            command: sudo apt-get install -y ruby-dev build-essential
+          - run:
+            name: Install and update the packages
+            command: sudo bundle install && sudo bundle update
+          - run:
+            name: Migrate the database 
+            command: rails db:migrate
+
+      - name: Clean up
+        steps:
+          - run:
+            name: Remove the private key after use
+            command: rm -f backendKey.pem
