@@ -102,8 +102,7 @@ jobs:
           if [ -f tmp/pids/server.pid ]; then
             rm tmp/pids/server.pid
           fi
-
-          rails server -b 0.0.0.0 
+          
           EOF
 
       - name: Clean up SSH key
