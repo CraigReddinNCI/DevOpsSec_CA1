@@ -91,7 +91,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i PROJECT_KEY.pem ubuntu@$PUBLIC_IP << 'EOF'
           set -e
-          cd /home/ubuntu/DEVOPSSEC_CA1
+          cd /home/ubuntu/DevOpsSec_CA1
           git pull origin main
           sudo apt-get update && sudo apt-get install -y ruby-dev build-essential
           bundle install
