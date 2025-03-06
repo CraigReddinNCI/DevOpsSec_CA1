@@ -103,7 +103,7 @@ jobs:
             rm tmp/pids/server.pid
           fi
 
-          nohup rails server -b 0.0.0.0 -d
+          rails server -b 0.0.0.0 
           EOF
 
       - name: Clean up SSH key
