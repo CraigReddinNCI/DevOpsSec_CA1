@@ -88,23 +88,23 @@ jobs:
       - name: Deploy to EC2
         env:
           PUBLIC_IP: ${{ secrets.PUBLIC_IP }}
-          run: |
-            ssh -o StrictHostKeyChecking=no -i PROJECT_KEY.pem ubuntu@$PUBLIC_IP << 'EOF'
-            set -e
-            cd /home/ubuntu/DEVOPSSEC_CA1
-            git pull origin main
-            sudo apt-get update && sudo apt-get install -y ruby-dev build-essential
-            bundle install
-            bundle exec rails db:migrate
+        run: |
+          ssh -o StrictHostKeyChecking=no -i PROJECT_KEY.pem ubuntu@$PUBLIC_IP << 'EOF'
+          set -e
+          cd /home/ubuntu/DEVOPSSEC_CA1
+          git pull origin main
+          sudo apt-get update && sudo apt-get install -y ruby-dev build-essential
+          bundle install
+          bundle exec rails db:migrate
 
-            # Ensure old Rails process is stopped and remove stale PID file
-            pkill -f "rails server" || true
-            if [ -f tmp/pids/server.pid ]; then
-              rm tmp/pids/server.pid
-            fi
+          # Ensure old Rails process is stopped and remove stale PID file
+          pkill -f "rails server" || true
+          if [ -f tmp/pids/server.pid ]; then
+            rm tmp/pids/server.pid
+          fi
 
-            nohup rails server -b 0.0.0.0 -d
-            EOF
+          nohup rails server -b 0.0.0.0 -d
+          EOF
 
       - name: Clean up SSH key
         run: rm -f PROJECT_KEY.pem
