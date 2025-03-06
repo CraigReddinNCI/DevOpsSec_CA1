@@ -91,7 +91,7 @@ jobs:
         run: echo "$AWS_SECRET_ACCESS_KEY" > PROJECT_KEY.pem
 
       - name: Set permissions to use the key
-        run: chmod 600 backendKey.pem
+        run: chmod 600 PROJECT_KEY.pem
 
       - name: Set EC2 instance details
         run: |
