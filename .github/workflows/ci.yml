@@ -93,6 +93,8 @@ jobs:
           set -e
           cd /home/ubuntu/DevOpsSec_CA1
           git pull origin main
+          # Kill the server if one is running
+          pkill -f "rails server" || true
           sudo apt-get update && sudo apt-get install -y ruby-dev build-essential
           bundle install
           bundle exec rails db:migrate
