@@ -86,10 +86,10 @@ jobs:
         run: echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u ${{ secrets.USERNAME }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ secrets.REPOSITORY_NAME }}/todo_api:latest .
+        run: sudo docker build -t ghcr.io/${{ secrets.REPOSITORY_NAME }}/todo_api:latest .
 
       - name: Push Docker image to GHCR
-        run: docker push ghcr.io/${{ secrets.REPOSITORY_NAME }}/todo_api:latest
+        run: sudo docker push ghcr.io/${{ secrets.REPOSITORY_NAME }}/todo_api:latest
         #Chang
   deploy:
     runs-on: ubuntu-latest
@@ -107,14 +107,15 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i PROJECT_KEY.pem ubuntu@$PUBLIC_IP << 'EOF'
           set -e
-          docker pull ghcr.io/${{ secrets.REPOSITORY_NAME }}/todo_api:latest
-          docker stop todo_api || true
-          docker rm todo_api || true
-          docker run -d -p 80:80 \
+          sudo docker pull ghcr.io/${{ secrets.REPOSITORY_NAME }}/todo_api:latest
+          sudodocker stop todo_api || true
+          sudo docker rm todo_api || true
+          sudo docker run -d -p 80:80 \
             -e RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
             --name todo_api \
             ghcr.io/${{ secrets.REPOSITORY_NAME }}/todo_api:latest
-            docker exec -it todo_api bundle exec rails db:migrate
+          
+            sudo docker exec -it todo_api bundle exec rails db:migrate
           
           EOF
 
