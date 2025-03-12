@@ -82,8 +82,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Log in to GitHub Container Registry (GHCR)
-        run: sudo docker login ghcr.io -u ${{ secrets.USERNAME }} -p ${{ secrets.TOKEN }}
+      - name: Log in to GitHub Container Registry
+        run: |
+          export USERNAME=${{ secrets.USERNAME }}
+          export TOKEN=${{ secrets.TOKEN }}
+          sudo docker login ghcr.io -u $USERNAME -p $TOKEN
+              
+
 
       - name: Build Docker image
         run: sudo docker build -t ghcr.io/${{ secrets.REPOSITORY_NAME }}/todo_api:latest .
