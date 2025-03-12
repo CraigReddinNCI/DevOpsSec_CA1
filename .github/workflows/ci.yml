@@ -93,10 +93,10 @@ jobs:
 
 
       - name: Build Docker image
-        run: sudo docker build -t ghcr.io/${{ secrets.REPOSITORY_NAME }}/todo_api:latest .
+        run: sudo docker build -t ghcr.io/${{ secrets.USERNAME }}/todo_api:latest .
 
       - name: Push Docker image to GHCR
-        run: sudo docker push ghcr.io/${{ secrets.REPOSITORY_NAME }}/todo_api:latest
+        run: sudo docker push ghcr.io/${{ secrets.USERName }}/todo_api:latest
         #Change this
   deploy:
     runs-on: ubuntu-latest

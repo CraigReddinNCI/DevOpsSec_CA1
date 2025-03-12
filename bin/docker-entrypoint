@@ -1,14 +1,31 @@
-#!/bin/bash -e
+#!/bin/bash
+set -e
+
+echo "Starting docker-entrypoint script..."
 
 # Enable jemalloc for reduced memory usage and latency.
 if [ -z "${LD_PRELOAD+x}" ]; then
-    LD_PRELOAD=$(find /usr/lib -name libjemalloc.so.2 -print -quit)
-    export LD_PRELOAD
+    JEMALLOC_LIB=$(find /usr/lib -name libjemalloc.so.2 -print -quit)
+    if [ -n "$JEMALLOC_LIB" ]; then
+        export LD_PRELOAD="$JEMALLOC_LIB"
+        echo "Enabled jemalloc: $JEMALLOC_LIB"
+    else
+        echo "Warning: jemalloc library not found, proceeding without it."
+    fi
 fi
 
-# If running the rails server then create or migrate existing database
-if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  ./bin/rails db:prepare
+# Remove pre-existing server.pid to prevent conflicts
+PID_FILE="/rails/tmp/pids/server.pid"
+if [ -f "$PID_FILE" ]; then
+    echo "Removing stale server.pid file..."
+    rm -f "$PID_FILE"
 fi
 
-exec "${@}"
+# If running the Rails server, prepare the database
+if [[ "${@: -2:1}" == "./bin/rails" && "${@: -1:1}" == "server" ]]; then
+    echo "Preparing database..."
+    ./bin/rails db:prepare
+fi
+
+echo "Executing command: $@"
+exec "$@"
