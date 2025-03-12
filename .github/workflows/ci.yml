@@ -88,7 +88,7 @@ jobs:
           export TOKEN=${{ secrets.TOKEN }}
           echo "USERNAME: ${{ secrets.USERNAME }}"
           echo "USERNAME: ${{ secrets.TOKEN }}"
-          sudo docker login ghcr.io -u $USERNAME -p $TOKEN
+          docker login ghcr.io -u $USERNAME -p $TOKEN
               
 
 
