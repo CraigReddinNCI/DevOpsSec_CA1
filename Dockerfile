@@ -5,11 +5,9 @@
 # docker build -t todo_api .
 # docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name todo_api todo_api
 
-# For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
-
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 ARG RUBY_VERSION=3.3.5
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+FROM ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
 WORKDIR /rails
@@ -50,9 +48,6 @@ RUN chmod +x bin/* && \
     sed -i "s/\r$//g" bin/* && \
     sed -i 's/ruby\.exe$/ruby/' bin/*
 
-
-
-
 # Final stage for app image
 FROM base
 
@@ -60,15 +55,23 @@ FROM base
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
-# Run and own only the runtime files as a non-root user for security
+# Set up non-root user for security
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
     chown -R rails:rails db log storage tmp
+
+# Switch to non-root user
 USER 1000:1000
 
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+# Add an entrypoint script for database setup
+COPY docker-entrypoint.sh /rails/bin/docker-entrypoint.sh
+RUN chmod +x /rails/bin/docker-entrypoint.sh
 
-# Start server via Thruster by default, this can be overwritten at runtime
+# Entrypoint prepares the database
+ENTRYPOINT ["/rails/bin/docker-entrypoint.sh"]
+
+# Expose port
 EXPOSE 80
-CMD ["./bin/thrust", "./bin/rails", "server"]
+
+# Start the Rails server
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
