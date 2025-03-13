@@ -95,7 +95,7 @@ jobs:
         run: sudo docker build -t ghcr.io/${{ secrets.USERNAME }}/todo_api:latest .
 
       - name: Push Docker image to GHCR
-        run: sudo docker push ghcr.io/${{ secrets.USERNAME }}/todo_api:latest --progress=plain
+        run: sudo docker push ghcr.io/${{ secrets.USERNAME }}/todo_api
 
   deploy:
     runs-on: ubuntu-latest
