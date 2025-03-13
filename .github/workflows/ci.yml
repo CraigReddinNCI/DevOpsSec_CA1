@@ -93,7 +93,7 @@ jobs:
           echo "USERNAME: ${{ secrets.TOKEN }}"
           docker login ghcr.io -u $USERNAME -p $TOKEN
 
-          #comment
+      #comment    
       - name: Build Docker image
         run: sudo docker build -t ghcr.io/${{ secrets.USERNAME }}/todo_api:latest .
 
