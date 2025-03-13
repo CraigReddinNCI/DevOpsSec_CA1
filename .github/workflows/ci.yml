@@ -93,15 +93,15 @@ jobs:
         run: |
           export USERNAME=${{ secrets.USERNAME }}
           export TOKEN=${{ secrets.TOKEN }}
-          echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u craigred123 --password-stdin
+          echo "${{ secrets.TOKEN }}" | docker login -u craigred123 --password-stdin
 
 
       #comment    
       - name: Build Docker image
-        run: docker build -t ghcr.io/craigred123/todo_api:latest .
+        run: docker build -t craigred123/todo_api:latest .
 
       - name: Push Docker image to GHCR
-        run: docker push ghcr.io/craigred123/todo_api:latest
+        run: docker push craigred123/todo_api:latest
 
   deploy:
     runs-on: ubuntu-latest
