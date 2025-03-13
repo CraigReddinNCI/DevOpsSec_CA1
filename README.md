@@ -21,4 +21,7 @@ Things you may want to cover:
 
 * Deployment instructions
 
+* If offences occure run the following 
+* bundle exec rubocop --parallel -A
+
 * ...
