@@ -92,8 +92,8 @@ jobs:
       - name: Log in to GitHub Container Registry
         run: |
           export USERNAME=${{ secrets.USERNAME }}
-          export TOKEN=${{ secrets.TOKEN }}
-          echo "${{ secrets.TOKEN }}" | docker login -u craigred123 --password-stdin
+          
+          echo "${{ secrets.PASSWORD }}" | docker login -u craigred123 --password-stdin
 
 
       #comment    
