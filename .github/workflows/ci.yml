@@ -89,9 +89,8 @@ jobs:
         run: |
           export USERNAME=${{ secrets.USERNAME }}
           export TOKEN=${{ secrets.TOKEN }}
-          echo "USERNAME: ${{ secrets.USERNAME }}"
-          echo "USERNAME: ${{ secrets.TOKEN }}"
-          docker login ghcr.io -u $USERNAME -p $TOKEN
+          echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u "${{ secrets.USERNAME }}" --password-stdin
+
 
       #comment    
       - name: Build Docker image
