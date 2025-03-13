@@ -131,6 +131,7 @@ jobs:
           sleep 10
           sudo docker exec todo_api bundle exec rails db:create
           sudo docker exec todo_api bundle exec rails db:migrate
+          sudo docker exec todo_api bundle exec rails db:seed
           
           EOF
 
