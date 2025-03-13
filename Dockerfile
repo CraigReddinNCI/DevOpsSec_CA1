@@ -64,8 +64,9 @@ RUN groupadd --system --gid 1000 rails && \
 USER 1000:1000
 
 # Add an entrypoint script for database setup
-COPY docker-entrypoint.sh /rails/bin/docker-entrypoint.sh
+COPY bin/docker-entrypoint.sh /rails/bin/docker-entrypoint.sh
 RUN chmod +x /rails/bin/docker-entrypoint.sh
+
 
 # Entrypoint prepares the database
 ENTRYPOINT ["/rails/bin/docker-entrypoint.sh"]
