@@ -26,6 +26,7 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    needs: [scan_ruby]
 
     steps:
       - name: Checkout code
@@ -45,6 +46,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    needs: [scan_ruby, lint]
 
     steps:
       - name: Install packages
@@ -95,7 +97,7 @@ jobs:
         run: sudo docker build -t ghcr.io/${{ secrets.USERNAME }}/todo_api:latest .
 
       - name: Push Docker image to GHCR
-        run: sudo docker push ghcr.io/${{ secrets.USERNAME }}/todo_api
+        run: sudo docker push ghcr.io/${{ secrets.USERNAME }}/todo_api:latest
 
   deploy:
     runs-on: ubuntu-latest
