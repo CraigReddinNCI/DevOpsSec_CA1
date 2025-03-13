@@ -129,6 +129,7 @@ jobs:
             ghcr.io/craig-reddin/todo_api:latest
 
           
+          sudo docker exec todo_api bundle exec rails db:create
           sudo docker exec todo_api bundle exec rails db:migrate
           
           EOF
