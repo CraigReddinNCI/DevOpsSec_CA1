@@ -98,7 +98,7 @@ jobs:
 
       #comment    
       - name: Build Docker image
-        run: sudo docker build -t ghcr.io/${{ secrets.USERNAME }}/todo_api:latest .
+        run: docker build -t ghcr.io/${{ secrets.USERNAME }}/todo_api:latest .
 
       - name: Push Docker image to GHCR
         run: docker push ghcr.io/${{ secrets.USERNAME }}/todo_api:latest
