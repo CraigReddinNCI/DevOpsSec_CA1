@@ -14,7 +14,7 @@ WORKDIR /rails
 
 # Install base packages and PostgreSQL development libraries for pg gem
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 postgresql libpq-dev build-essential && \
+    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 libpq-dev build-essential && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment
