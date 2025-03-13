@@ -119,6 +119,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i PROJECT_KEY.pem ubuntu@$PUBLIC_IP << 'EOF'
           set -e
+          sudo docker system prune -a -f
           sudo docker pull ghcr.io/craig-reddin/todo_api:latest
           sudo docker stop todo_api || true
           sudo docker rm todo_api || true
