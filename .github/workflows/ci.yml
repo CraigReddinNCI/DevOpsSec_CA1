@@ -93,7 +93,7 @@ jobs:
         run: |
           export USERNAME=${{ secrets.USERNAME }}
           export TOKEN=${{ secrets.TOKEN }}
-          echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u craig-reddin" --password-stdin
+          echo "${{ secrets.TOKEN }}" | docker login ghcr.io -u "craig-reddin" --password-stdin
 
 
       #comment    
