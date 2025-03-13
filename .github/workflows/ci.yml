@@ -119,15 +119,15 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i PROJECT_KEY.pem ubuntu@$PUBLIC_IP << 'EOF'
           set -e
-          sudo docker pull ghcr.io/${{ secrets.REPOSITORY_NAME }}/todo_api:latest
-          sudo docker stop todo_api || true
-          sudo docker rm todo_api || true
-          sudo docker run -d -p 80:80 \
+          docker pull ${{ secrets.REPOSITORY_NAME }}/todo_api:latest
+          docker stop todo_api || true
+          docker rm todo_api || true
+          docker run -d -p 80:80 \
             -e RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
             --name todo_api \
-            ghcr.io/${{ secrets.REPOSITORY_NAME }}/todo_api:latest
+            ${{ secrets.REPOSITORY_NAME }}/todo_api:latest
           
-            sudo docker exec -it todo_api bundle exec rails db:migrate
+            docker exec -it todo_api bundle exec rails db:migrate
           
           EOF
 
