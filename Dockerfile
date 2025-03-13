@@ -12,7 +12,6 @@ FROM ruby:$RUBY_VERSION-slim AS base
 # Rails app lives here
 WORKDIR /rails
 
-# Install base packages
 # Install base packages and PostgreSQL development libraries for pg gem
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 postgresql libpq-dev build-essential && \
@@ -61,13 +60,12 @@ RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
     chown -R rails:rails db log storage tmp
 
+# Add an entrypoint script for database setup (done as root user to avoid permission issues)
+COPY bin/docker-entrypoint.sh /rails/bin/docker-entrypoint.sh
+RUN chmod +x /rails/bin/docker-entrypoint.sh
+
 # Switch to non-root user
 USER 1000:1000
-
-# Add an entrypoint script for database setup
-COPY bin/docker-entrypoint /rails/bin/docker-entrypoint
-RUN chmod +x /rails/bin/docker-entrypoint
-
 
 # Entrypoint prepares the database
 ENTRYPOINT ["/rails/bin/docker-entrypoint.sh"]
