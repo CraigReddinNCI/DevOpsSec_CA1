@@ -128,7 +128,7 @@ jobs:
             --name todo_api \
             ghcr.io/craig-reddin/todo_api:latest
 
-          
+          sleep 10
           sudo docker exec todo_api bundle exec rails db:create
           sudo docker exec todo_api bundle exec rails db:migrate
           
