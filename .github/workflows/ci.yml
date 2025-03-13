@@ -101,7 +101,7 @@ jobs:
         run: docker build -t ghcr.io/${{ secrets.USERNAME }}/todo_api:latest .
 
       - name: Push Docker image to GHCR
-        run: docker push ghcr.io/${{ secrets.USERNAME }}/todo_api:latest
+        run: docker push ghcr.io/craigred123/todo_api:latest
 
   deploy:
     runs-on: ubuntu-latest
