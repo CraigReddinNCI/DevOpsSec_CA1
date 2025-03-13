@@ -311,6 +311,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 8.0.1)
   rubocop
+  rubocop-performance
   rubocop-rails
   rubocop-rails-omakase
   ruby_audit

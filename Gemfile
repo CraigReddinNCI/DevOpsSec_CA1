@@ -43,5 +43,6 @@ group :development, :production, :test do
   gem "pg"
   gem "rubocop-rails"
   gem "rubocop-rails-omakase"
+  gem "rubocop-performance"
   gem "rubocop"
 end
