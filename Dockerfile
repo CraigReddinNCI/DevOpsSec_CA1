@@ -68,7 +68,7 @@ RUN chmod +x /rails/bin/docker-entrypoint
 USER 1000:1000
 
 # Entrypoint prepares the database
-ENTRYPOINT ["/rails/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Expose port
 EXPOSE 80
