@@ -93,15 +93,15 @@ jobs:
         run: |
           export USERNAME=${{ secrets.USERNAME }}
           export TOKEN=${{ secrets.TOKEN }}
-          echo "${{ secrets.TOKEN }}" | sudo docker login ghcr.io -u "craig-reddin" --password-stdin
+          echo "${{ secrets.TOKEN }}" | sudo docker login ghcr.io -u "${{ secrets.USERNAME }}" --password-stdin
 
 
       #comment    
       - name: Build Docker image
-        run: sudo docker build -t ghcr.io/craig-reddin/todo_api:latest .
+        run: sudo docker build -t ghcr.io/${{ secrets.USERNAME }}/${{ secrets.IMAGE }}:latest .
 
       - name: Push Docker image to GHCR
-        run: sudo docker push ghcr.io/craig-reddin/todo_api:latest
+        run: sudo docker push ghcr.io/${{ secrets.USERNAME }}/${{ secrets.IMAGE }}:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -120,38 +120,23 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i PROJECT_KEY.pem ubuntu@$PUBLIC_IP << 'EOF'
           set -e
           sudo docker system prune -a -f
-          sudo docker pull ghcr.io/craig-reddin/todo_api:latest
-          sudo docker stop todo_api || true
-          sudo docker rm todo_api || true
-          
+          sudo docker pull ghcr.io/${{ secrets.USERNAME }}/${{ secrets.IMAGE }}:latest
+          sudo docker stop ${{ secrets.IMAGE }} || true
+          sudo docker rm ${{ secrets.IMAGE }} || true
+
           sudo systemctl enable nginx
           sudo systemctl restart nginx
 
           sudo docker run -d -p 3000:3000 \
             -e RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
-            --name todo_api \
-            ghcr.io/craig-reddin/todo_api:latest
-
-          sleep 30
-          sudo docker exec todo_api bundle exec rails db:create
-          sudo docker exec todo_api bundle exec rails db:migrate
-          sudo docker exec todo_api bundle exec rails db:seed
+            --name ${{ secrets.IMAGE }} \
+            ghcr.io/${{ secrets.USERNAME }}/${{ secrets.IMAGE }}:latest
+            
+          sudo docker exec ${{ secrets.IMAGE }} bundle exec rails db:create
+          sudo docker exec ${{ secrets.IMAGE }} bundle exec rails db:migrate
+          sudo docker exec ${{ secrets.IMAGE }} bundle exec rails db:seed
           
           EOF
 
       - name: Clean up SSH key
         run: rm -f PROJECT_KEY.pem
-
-          # cd /home/ubuntu/DevOpsSec_CA1
-          # git pull origin main
-          # sudo apt-get update && sudo apt-get install -y ruby-dev build-essential
-          # bundle install
-          # bundle exec rails db:migrate
-
-          # # Ensure old Rails process is stopped and remove stale PID file
-          # pkill -f "rails server" || true
-          # if [ -f tmp/pids/server.pid ]; then
-          #   rm tmp/pids/server.pid
-          # fi
-          
-          #nohup rails server -b 0.0.0.0 -d
