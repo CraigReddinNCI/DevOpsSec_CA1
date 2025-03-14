@@ -107,7 +107,6 @@ jobs:
         env:
           PUBLIC_IP: ${{ secrets.PUBLIC_IP }}
           USER_EC2: ${{ secrets.USER_EC2 }}
-          PORT: ${{ secrets.PORT }}
         run: |
           ssh -o StrictHostKeyChecking=no -i PROJECT_KEY.pem $USER_EC2@$PUBLIC_IP << 'EOF'
           set -e
@@ -119,7 +118,7 @@ jobs:
           sudo systemctl enable nginx
           sudo systemctl restart nginx
 
-          sudo docker run -d -p $PORT:$PORT \
+          sudo docker run -d -p 3000:3000 \
             -e RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
             --name ${{ secrets.IMAGE }} \
             ghcr.io/${{ secrets.USERNAME }}/${{ secrets.IMAGE }}:latest
