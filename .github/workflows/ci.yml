@@ -73,14 +73,6 @@ jobs:
           RAILS_ENV: test
         run: bundle exec rails db:test:prepare test test:system
 
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
-
   docker:
     runs-on: ubuntu-latest
     needs: [scan_ruby, lint, test]
@@ -91,8 +83,6 @@ jobs:
 
       - name: Log in to GitHub Container Registry
         run: |
-          export USERNAME=${{ secrets.USERNAME }}
-          export TOKEN=${{ secrets.TOKEN }}
           echo "${{ secrets.TOKEN }}" | sudo docker login ghcr.io -u "${{ secrets.USERNAME }}" --password-stdin
 
 
@@ -116,8 +106,9 @@ jobs:
       - name: Deploy to EC2
         env:
           PUBLIC_IP: ${{ secrets.PUBLIC_IP }}
+          USER_EC2: ${{ secrets.USER_EC2 }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i PROJECT_KEY.pem ubuntu@$PUBLIC_IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i PROJECT_KEY.pem $USER_EC2@$PUBLIC_IP << 'EOF'
           set -e
           sudo docker system prune -a -f
           sudo docker pull ghcr.io/${{ secrets.USERNAME }}/${{ secrets.IMAGE }}:latest
@@ -131,7 +122,7 @@ jobs:
             -e RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
             --name ${{ secrets.IMAGE }} \
             ghcr.io/${{ secrets.USERNAME }}/${{ secrets.IMAGE }}:latest
-            
+
           sudo docker exec ${{ secrets.IMAGE }} bundle exec rails db:create
           sudo docker exec ${{ secrets.IMAGE }} bundle exec rails db:migrate
           sudo docker exec ${{ secrets.IMAGE }} bundle exec rails db:seed
