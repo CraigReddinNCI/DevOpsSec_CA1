@@ -123,6 +123,10 @@ jobs:
           sudo docker pull ghcr.io/craig-reddin/todo_api:latest
           sudo docker stop todo_api || true
           sudo docker rm todo_api || true
+          
+          sudo systemctl enable nginx
+          sudo systemctl restart nginx
+
           sudo docker run -d -p 3000:3000 \
             -e RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
             --name todo_api \
