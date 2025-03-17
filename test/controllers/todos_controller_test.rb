@@ -27,12 +27,12 @@ class TodosControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # test "should destroy todo" do
-  #   assert_difference("Todo.count", -1) do
-  #     delete todo_url(@todo), as: :json
-  #   end
-  #   assert_response :no_content
-  # end
+  test "should destroy todo" do
+    assert_difference("Todo.count", -1) do
+      delete todo_url(@todo), as: :json
+    end
+    assert_response :no_content
+  end
 
   test "should not create todo, no name" do
     assert_no_difference("Todo.count") do

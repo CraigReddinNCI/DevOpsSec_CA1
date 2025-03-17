@@ -52,10 +52,10 @@ class TodosIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  # test "can delete a todo" do
-  #   assert_difference "Todo.count", -1 do
-  #     delete "/todos/#{@todo.id}", as: :json
-  #   end
-  #   assert_response :no_content
-  # end
+  test "can delete a todo" do
+    assert_difference "Todo.count", -1 do
+      delete "/todos/#{@todo.id}", as: :json
+    end
+    assert_response :no_content
+  end
 end
