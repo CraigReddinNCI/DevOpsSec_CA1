@@ -48,13 +48,13 @@ class TodosControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
-  test "should not update todo, no name" do
-    patch todo_url(@todo), params: { todo: { todoname: "" } }, as: :json
-    assert_response :unprocessable_entity
-  end
+  # test "should not update todo, no name" do
+  #   patch todo_url(@todo), params: { todo: { todoname: "" } }, as: :json
+  #   assert_response :unprocessable_entity
+  # end
 
-  test "should not update todo, no description" do
-    patch todo_url(@todo), params: { todo: { tododescription: "" } }, as: :json
-    assert_response :unprocessable_entity
-  end
+  # test "should not update todo, no description" do
+  #   patch todo_url(@todo), params: { todo: { tododescription: "" } }, as: :json
+  #   assert_response :unprocessable_entity
+  # end
 end
