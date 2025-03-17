@@ -34,9 +34,9 @@ class TodosController < ApplicationController
   end
 
   # DELETE /todos/1
-  # def destroy
-  #   @todo.destroy!
-  # end
+  def destroy
+    @todo.destroy!
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
